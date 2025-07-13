@@ -6,3 +6,16 @@ This project implements a two-tiered system for inventory management, featuring 
 
 This solution demonstrates API design, microservice interaction, and the integration of Large Language Models (LLMs) for intuitive user interfaces.
 
+### Project Structure
+The repository is organized as follows:
+
+```
+.
+├── inventory-service/
+│   └── main.py              # Inventory Web Service implementation
+├── mcp-server/
+│   └── main.py              # Model Control Plane (MCP) Server implementation
+├── .gitignore               # Specifies intentionally untracked files to ignore by Git
+└── README.md                # This documentation file
+```
+
