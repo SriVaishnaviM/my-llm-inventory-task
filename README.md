@@ -85,9 +85,48 @@ source ~/.zshrc # Or ~/.bash_profile
 ```
 - Crucially, open a BRAND NEW Terminal window/tab
 - Verify the key is set in the new terminal: (It should display the API key)
-  ```
+```
     echo $GEMINI_API_KEY
-   ```
+```
+## Running the Services
+Both services must be running concurrently in separate terminal windows/tabs.
+
+### 1. Run Inventory Web Service
+- Open a new Terminal window/tab.
+
+- Activate your virtual environment:
+```
+source venv/bin/activate
+```
+- Navigate to the inventory-service directory:
+```
+cd inventory-service
+```
+- Start the service: Leave the terminal running
+```
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+```
+### 2. Run Model Control Plane (MCP) Server
+- Open another new Terminal window/tab.
+
+- Activate your virtual environment:
+```
+  source venv/bin/activate
+```
+- Navigate to the mcp-server directory:
+```
+  cd mcp-server
+```
+- Start the service:
+```
+  uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+```
+## API Endpoints and Testing
+
+
+
+
+
   
 
 
