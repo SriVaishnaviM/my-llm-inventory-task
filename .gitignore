@@ -1,0 +1,12 @@
+# Python virtual environment
+venv/
+
+# Python compiled files
+__pycache__/
+*.pyc
+
+# Environment variables (do NOT commit your API key directly)
+.env
+
+# macOS specific files
+.DS_Store
