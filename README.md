@@ -36,7 +36,7 @@ First, clone this GitHub repository to your local machine:
 git clone https://github.com/[YOUR_GITHUB_USERNAME]/[YOUR_REPO_NAME].git
 cd [YOUR_REPO_NAME] # e.g., cd my-llm-inventory-task
 ```
-2. Python Environment Setup
+### 2. Python Environment Setup
 It is highly recommended to use a Python virtual environment to manage dependencies.
 
 ```
@@ -50,12 +50,13 @@ python3 -m venv venv
 # IMPORTANT: You must run this command in each new terminal session you open for this project.
 source venv/bin/activate
 ```
-3. Install Dependencies
+### 3. Install Dependencies
 With your virtual environment activated, install the required Python packages
 ```
 pip install fastapi uvicorn pydantic httpx
 ```
-4. Obtain and Configure Gemini API Key
+### 4. Obtain and Configure Gemini API Key
+
 The MCP Server requires a Google Gemini API key to interact with the Generative AI model.
 
 1. Get your API Key:
@@ -68,8 +69,25 @@ Create a new API key and copy it immediately.
 
 2. Set as Environment Variable:
 
-Open your shell configuration file (e.g., .zshrc for zsh, .bash_profile or .bashrc for bash):
+- Open your shell configuration file (e.g., .zshrc for zsh, .bash_profile or .bashrc for bash):
 ```
 nano ~/.zshrc # Or ~/.bash_profile
 ```
+- Add the following line to the very end of the file, replacing
+- YOUR_ACTUAL_GEMINI_API_KEY_HERE with your copied key:
+```
+  export GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY_HERE"
+```
+- Save and Exit nano ( Ctrl+O or Ctrl+X)
+- Apply the changes to your current terminal:
+```
+source ~/.zshrc # Or ~/.bash_profile
+```
+- Crucially, open a BRAND NEW Terminal window/tab
+- Verify the key is set in the new terminal: (It should display the API key)
+  ```
+    echo $GEMINI_API_KEY
+   ```
+  
+
 
