@@ -18,4 +18,37 @@ The repository is organized as follows:
 ├── .gitignore               # Specifies intentionally untracked files to ignore by Git
 └── README.md                # This documentation file
 ```
+FastAPI automatically generates OpenAPI specifications for both services, accessible at /openapi.json (e.g., http://localhost:8000/openapi.json for the Inventory Service). The interactive documentation (Swagger UI) is available at /docs (e.g., http://localhost:8000/docs).
+
+Setup Instructions
+Follow these steps to set up and run the project on your local machine (macOS instructions provided).
+
+#### Prerequisites
+1. Python 3.9+
+2. Homebrew (recommended for macOS for Python installation)
+3. Git
+
+### 1. Clone the Repository
+
+First, clone this GitHub repository to your local machine:
+
+```
+git clone https://github.com/[YOUR_GITHUB_USERNAME]/[YOUR_REPO_NAME].git
+cd [YOUR_REPO_NAME] # e.g., cd my-llm-inventory-task
+```
+2. Python Environment Setup
+It is highly recommended to use a Python virtual environment to manage dependencies.
+
+```
+# Navigate to the project root directory
+cd ~/Documents/InternshipTask # Or wherever you cloned the repo
+
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate the virtual environment
+# IMPORTANT: You must run this command in each new terminal session you open for this project.
+source venv/bin/activate
+```
+
 
