@@ -50,5 +50,26 @@ python3 -m venv venv
 # IMPORTANT: You must run this command in each new terminal session you open for this project.
 source venv/bin/activate
 ```
+3. Install Dependencies
+With your virtual environment activated, install the required Python packages
+```
+pip install fastapi uvicorn pydantic httpx
+```
+4. Obtain and Configure Gemini API Key
+The MCP Server requires a Google Gemini API key to interact with the Generative AI model.
 
+1. Get your API Key:
+
+Go to Google AI Studio.
+
+Sign in with your Google account.
+
+Create a new API key and copy it immediately.
+
+2. Set as Environment Variable:
+
+Open your shell configuration file (e.g., .zshrc for zsh, .bash_profile or .bashrc for bash):
+```
+nano ~/.zshrc # Or ~/.bash_profile
+```
 
