@@ -15,6 +15,7 @@ The repository is organized as follows:
 │   └── main.py              # Inventory Web Service implementation
 ├── mcp-server/
 │   └── main.py              # Model Control Plane (MCP) Server implementation
+|__ results_image            # Added a folder for screenshots of demo on local machine
 ├── .gitignore               # Specifies intentionally untracked files to ignore by Git
 └── README.md                # This documentation file
 ```
