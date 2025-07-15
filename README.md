@@ -61,9 +61,9 @@ The MCP Server requires a Google Gemini API key to interact with the Generative 
 
 1. Get your API Key:
 
-Go to Google AI Studio.
+- Go to Google AI Studio.
 
-Sign in with your Google account.
+- Sign in with your Google account.
 
 Create a new API key and copy it immediately.
 
@@ -172,9 +172,46 @@ POST /process_query
 Processes a natural language query, interprets it using GenAI, and interacts with the Inventory Service.
 
 - Get current inventory:
+```
+  curl -X POST "http://localhost:8001/process_query" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "How many pants and shirts do I have?"}'
+```
+- Sell 2 t-shirts:
 
+```
+  curl -X POST "http://localhost:8001/process_query" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "I sold two t-shirts"}'
+```
+- Add 7 pants
+```
+  curl -X POST "http://localhost:8001/process_query" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "Add 7 pants to the stock"}'
+```
+- Check stock of a specific item:
+```
+curl -X POST "http://localhost:8001/process_query" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "What is the current stock of tshirts?"}'
+```
+- Test an unsupported query (expected error):
+```
+curl -X POST "http://localhost:8001/process_query" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "I want to buy a spaceship."}'
+```
+## Output Screenshots
 
-
+1. Inventory Web Service
+![Project Screenshot]
+## Design Choices and Reasoning
 
 
   
