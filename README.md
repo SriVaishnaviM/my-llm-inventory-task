@@ -65,7 +65,8 @@ The MCP Server requires a Google Gemini API key to interact with the Generative 
 
 - Sign in with your Google account.
 
-Create a new API key and copy it immediately.
+   - Create a new API key and copy it immediately.
+   - Gemini API: AIzaSyA1CZDReoxHPTSd_BP9qFGsSo1WpiDH3aE (used for this project)
 
 2. Set as Environment Variable:
 
@@ -73,8 +74,7 @@ Create a new API key and copy it immediately.
 ```
 nano ~/.zshrc # Or ~/.bash_profile
 ```
-- Add the following line to the very end of the file, replacing
-- YOUR_ACTUAL_GEMINI_API_KEY_HERE with your copied key:
+- Add the following line to the very end of the file, replacing YOUR_ACTUAL_GEMINI_API_KEY_HERE with your copied key:
 ```
   export GEMINI_API_KEY="YOUR_ACTUAL_GEMINI_API_KEY_HERE"
 ```
@@ -92,9 +92,7 @@ source ~/.zshrc # Or ~/.bash_profile
 Both services must be running concurrently in separate terminal windows/tabs.
 
 ### 1. Run Inventory Web Service
-- Open a new Terminal window/tab.
-
-- Activate your virtual environment:
+- Open a new Terminal window/tab and activate your virtual environment:
 ```
 source venv/bin/activate
 ```
@@ -209,10 +207,81 @@ curl -X POST "http://localhost:8001/process_query" \
 ```
 ## Output Screenshots
 
-1. Inventory Web Service
-![Project Screenshot](result_images/Inventory Web Service 1.png)
+The screenshots attached below shows brief execution of the code on the local host 
+
+### 1. Inventory Web Service
+
+![Screenshot of Inventory Web Service API Documentation](https://raw.githubusercontent.com/SriVaishnaviM/my-llm-inventory-task/main/result_images/Inventory%20Web%20Service%202.png)
+
+![Screenshot of Inventory Web Service API Documentation](https://raw.githubusercontent.com/SriVaishnaviM/my-llm-inventory-task/main/result_images/Inventory%20Web%20Service%201.png)
+
+![Screenshot of Inventory Web Service API Documentation](https://raw.githubusercontent.com/SriVaishnaviM/my-llm-inventory-task/main/result_images/Inventory%20Web%20Sevice%203.png)
+
+### 2. MCP-Server
+
+After performing Curl operations in the demo the number of t-shirts:9 and pants:25
+
+![Screenshot of MCP Server API Documentation](https://raw.githubusercontent.com/SriVaishnaviM/my-llm-inventory-task/main/result_images/MCP-Server%201.png)
+
+![Screenshot of MCP Server API Documentation](https://raw.githubusercontent.com/SriVaishnaviM/my-llm-inventory-task/main/result_images/MCP-SERVER%202.png)
+
 
 ## Design Choices and Reasoning
+
+- Why Python and FastAPI?
+
+  - FastAPI's High Performance: Built on top of Starlette for web and Pydantic for data, FastAPI achieves high performance on par with Node.js and Go. This is well-suited for high-throughput API services.
+
+  - Ease of Use & Rapid Development: FastAPI provides a modern, straightforward, and developer-friendly experience with minimal boilerplate, accelerating API development.
+
+  - Automatic OpenAPI/Swagger UI Generation: It features an automatic generation of interactive API documentation (Swagger UI at /docs) and machine-readable OpenAPI specifications (/openapi.json). This makes it much easier for API understanding, testing, as well as integration by human developers and other services.
+
+  - Strong Type Hinting with Pydantic: Pydantic models are used for data validation and serialization/deserialization, which includes strong data handling, explicit API contracts, and fewer runtime errors.
+
+  - Asynchronous Capabilities: FastAPI supports async/await natively, which is essential for I/O-bound operations efficiently, such as non-blocking HTTP requests to external services like the Gemini LLM or the Inventory Service.
+
+- Why Google Gemini API?
+
+  - Powerful Natural Language Understanding: Gemini excels at interpreting complex natural language queries and extracting structured information from them.
+
+  - Structured Output Enforcement (responseSchema): A key capability utilized is the responseSchema feature within the Gemini API's generationConfig. This allows the MCP server to explicitly request the LLM to return its interpretation in a predefined JSON format (e.g., specifying operation, item, change). This is vital for reliably translating unstructured user queries into actionable, programmatic commands.
+  -  Performance for Intent Recognition: Gemini 2.0 Flash offers a good balance of speed and capability for this specific task of intent recognition and parameter extraction, making it suitable for real-time API interactions.
+
+- Leveraging OpenAPI (FastAPI's Automatic Documentation):
+   - FastAPI inherently provides comprehensive API documentation through the OpenAPI specification.
+   - The /docs endpoint renders an interactive Swagger UI, allowing developers to visually explore all endpoints, understand request/response schemas, and even execute API calls directly from the browser.
+   - The /openapi.json endpoint provides a machine-readable JSON representation of the API. This acts as a formal contract, enabling automated tools (like code generators, API gateways, or even other microservices) to understand and interact with the API without manual parsing. This significantly improves discoverability and integration efficiency.
+
+- Object-Oriented Programming (OOP) Concepts:
+   - Application Object: The app = FastAPI(...) instance serves as the central object representing the web application, encapsulating its routes, middleware, and configuration.
+   - Pydantic Models (BaseModel): Classes like InventoryResponse, InventoryUpdateRequest, NaturalLanguageQuery, and MCPResponse are direct applications of OOP. They define clear, reusable data structures with type hints, acting as schemas for API request and response bodies. This promotes data integrity, readability, and maintainability by clearly separating data definitions from business logic.
+   - Modular Functions: Each API endpoint (get_inventory, update_inventory, process_natural_language_query) and helper function (call_gemini_llm) is encapsulated within its own function, each responsible for a specific task. This modularity enhances code organization, reusability, and testability.
+
+- Prompt Design for LLM Interaction:
+
+  - The llm_prompt in mcp-server/main.py is meticulously crafted to guide the LLM's behavior.
+  - Clear Role Assignment: The prompt explicitly tells the LLM its function: "an intelligent assistant that converts natural language inventory requests into structured JSON commands."
+  - Specific Instructions and Constraints: It defines the exact fields (operation, item, change, reasoning) and their allowed values (e.g., operation as "GET" or "POST", item as "tshirts" or "pants"), ensuring the LLM's output is predictable and parseable.
+  - Few-Shot Examples: Providing multiple concrete examples of user queries and their corresponding desired JSON responses is crucial for "few-shot learning." This significantly improves the LLM's ability to accurately interpret new, unseen queries and consistently generate the correct structured output, even with variations in phrasing.
+  - JSON Schema Enforcement: The responseSchema in the Gemini API call reinforces the prompt's instructions by programmatically enforcing the desired JSON structure, making the LLM's output highly reliable for downstream processing.
+
+- MCP Server Logic Flow:
+   - Input Reception: The MCP server receives a natural language query from the client via its /process_query endpoint.
+   - LLM Interpretation: It constructs a detailed prompt, incorporating the user's query, and sends this to the call_gemini_llm helper function.
+   - Action Determination: The call_gemini_llm function interacts with the Google Gemini API, which returns a structured JSON object (thanks to responseSchema) containing the intended operation (GET/POST), item, change, and reasoning.
+   - Inventory Service Interaction: Based on the LLM's interpreted operation and parameters, the MCP server then makes a precise HTTP request to the local Inventory Web Service (either a GET /inventory or a POST /inventory with the relevant item and change amount).
+   - Response Generation: Finally, the MCP server compiles the result from the Inventory Service (or an appropriate error message) into an MCPResponse object, providing a clear message and the inventory_state to the original client.
+   - Robust Error Handling: Comprehensive try-except blocks are implemented throughout to gracefully handle potential issues such as network connectivity problems, errors returned by the Gemini API, malformed LLM responses, or errors from the Inventory Service.
+
+## Known Limitations
+  
+This project is a functional prototype and has certain limitations:
+  - In-Memory Data Store: The inventory data is stored in memory and will reset to its initial state (tshirts: 20, pants: 15) whenever the inventory-service is restarted. For production, a persistent database (e.g., PostgreSQL, MongoDB, SQLite) would be required.
+  - Limited Item Support: The system currently only supports 'tshirts' and 'pants' as inventory items, as per the task requirements. Extending this would involve updating both the Inventory Service and the LLM's prompt/schema.
+  - LLM Interpretation Variability: While prompt engineering helps, LLMs can occasionally misinterpret highly ambiguous, very complex, or out-of-scope natural language queries. Robust production systems might require more sophisticated fallback mechanisms or human-in-the-loop validation.
+  - Basic Error Handling: The error handling is functional but could be enhanced for a production environment (e.g., more specific error codes, custom error responses, comprehensive logging, and monitoring).
+  - No Authentication/Authorization: Neither API has any security measures (authentication or authorization) implemented. For a real-world application, secure access control would be paramount.
+  - No Dynamic API Discovery: The MCP server is hardcoded with the Inventory Service's URL and endpoint structure. In a more complex microservice architecture, dynamic service discovery or reading the Inventory Service's OpenAPI spec at runtime could be considered for greater flexibility.
 
 
   
