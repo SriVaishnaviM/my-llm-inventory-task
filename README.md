@@ -66,7 +66,7 @@ The MCP Server requires a Google Gemini API key to interact with the Generative 
 - Sign in with your Google account.
 
    - Create a new API key and copy it immediately.
-   - Gemini API: AIzaSyA1CZDReoxHPTSd_BP9qFGsSo1WpiDH3aE (used for this project)
+  
 
 2. Set as Environment Variable:
 
