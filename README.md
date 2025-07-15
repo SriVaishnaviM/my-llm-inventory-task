@@ -210,7 +210,8 @@ curl -X POST "http://localhost:8001/process_query" \
 ## Output Screenshots
 
 1. Inventory Web Service
-![Project Screenshot]
+![Project Screenshot](result_images/Inventory Web Service 1.png)
+
 ## Design Choices and Reasoning
 
 
