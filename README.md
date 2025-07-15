@@ -123,6 +123,56 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 ```
 ## API Endpoints and Testing
 
+You can test the APIs using curl commands in a third terminal window (with venv activated) or via the interactive Swagger UI in your web browser.
+
+Inventory Web Service (http://localhost:8000)
+Access Swagger UI: http://localhost:8000/docs
+
+GET /inventory
+Retrieves the current stock levels for tshirts and pants.
+```
+curl -X GET "http://localhost:8000/inventory" \
+     -H "accept: application/json"
+```
+POST /inventory
+Modifies the count of a specific item (tshirts or pants) in the inventory.
+
+- Sell 5 t-shirts:
+```
+curl -X POST "http://localhost:8000/inventory" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"item": "tshirts", "change": -5}'
+```
+- Add 10 pants:
+```
+curl -X POST "http://localhost:8000/inventory" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"item": "pants", "change": 10}'
+```
+- Test Invalid item
+```
+curl -X POST "http://localhost:8000/inventory" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"item": "socks", "change": 1}'
+```
+- Test reducing stock below zero (expected error):
+```
+curl -X POST "http://localhost:8000/inventory" \
+     -H "accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d '{"item": "tshirts", "change": -100}'
+```
+Model Control Plane (MCP) Server (http://localhost:8001)
+Access Swagger UI: http://localhost:8001/docs
+
+POST /process_query
+Processes a natural language query, interprets it using GenAI, and interacts with the Inventory Service.
+
+- Get current inventory:
+
 
 
 
