@@ -8,7 +8,6 @@ import json # To parse JSON response from LLM
 import os # For environment variables (API Key)
 
 # --- Configuration ---
-# Replace with the actual URL of your Inventory Web Service
 # If running locally, ensure the inventory-service is running on this host and port.
 INVENTORY_SERVICE_BASE_URL = "http://localhost:8000"
 
